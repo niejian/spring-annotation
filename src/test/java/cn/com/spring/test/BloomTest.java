@@ -1,21 +1,29 @@
 package cn.com.spring.test;
 
-import java.nio.charset.Charset;
-
-import org.junit.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
+import cn.com.spring.Dao.OaNoCodeDao;
+import cn.com.spring.bean.OaNoCode;
+import cn.com.spring.config.RedisConfig;
+import cn.com.spring.service.OaCodeService;
+import cn.com.spring.units.BloomFilterUtils;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
-
-import cn.com.spring.bean.RedisPropertiesBean;
-import cn.com.spring.config.RedisConfig;
-import cn.com.spring.units.BloomFilterUtils;
 import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
+
+import javax.annotation.PostConstruct;
+import java.nio.charset.Charset;
+import java.util.List;
 
 public class BloomTest {
 	
 	private AnnotationConfigApplicationContext annotationContext;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private OaCodeService oaCodeService;
 
 	@Ignore
 	@Test
@@ -40,4 +48,50 @@ public class BloomTest {
 		
 		
 	}
+
+	@Ignore
+	@Test
+	public void test02(){
+		annotationContext = new AnnotationConfigApplicationContext(RedisConfig.class);
+		RedisTemplate redisTemplate = annotationContext.getBean(RedisTemplate.class);
+		RedisSerializer valueSerializer = redisTemplate.getValueSerializer();
+		System.out.println(valueSerializer);
+		redisTemplate.opsForValue().set("test", "test");
+		String o = (String) redisTemplate.opsForValue().get("test");
+		System.out.println(o);
+		logger.info("================");
+		logger.info("直接通过dao调用");
+        OaNoCodeDao oaNoCodeDao = annotationContext.getBean(OaNoCodeDao.class);
+        OaNoCode oaNoCode = oaNoCodeDao.getByCodeid("2426");
+        System.out.println(oaNoCode);
+        logger.info(">>>>>>>>>>>>>>>>");
+        logger.info("通过service调用");
+        oaCodeService = annotationContext.getBean(OaCodeService.class);
+        OaNoCode oaNoCode1 = oaCodeService.getOaCodeById("2426");
+        System.out.println(oaNoCode1);
+
+        logger.info(">>>>>>>>>>>>>>>>");
+        logger.info(">>>>>>>>>>>>>>>>");
+        logger.info(">>>>>>>>>>>>>>>>");
+        List<OaNoCode> list = oaNoCodeDao.getAllByCodeidAfter("0");
+        System.out.println(list.toString());
+        annotationContext.close();
+	}
+
+	@Test
+    public void test03(){
+        RedisTemplate redisTemplate = annotationContext.getBean(RedisTemplate.class);
+
+        OaCodeService oaCodeService = annotationContext.getBean(OaCodeService.class);
+        OaNoCode oaNoCode1 = oaCodeService.getOaCodeById("2426");
+        System.out.println(oaNoCode1);
+		oaCodeService.getOaCodeById("2426");
+		String string = new String();
+	}
+
+    @PostConstruct
+    public void init(){
+        oaCodeService = annotationContext.getBean(OaCodeService.class);
+
+    }
 }
