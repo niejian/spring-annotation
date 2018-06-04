@@ -79,7 +79,7 @@ Spring的工作方式都知道，通过配置各种xml文件，然后在web.xml�
     </bean>
     <!-- 配置扫描器 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <!-- 扫描cn.com.bluemoon.common.*.mapper以及它的子包下的所有映射接口类 -->
+        <!-- 扫描cn.com.common.*.mapper以及它的子包下的所有映射接口类 -->
         <property name="basePackage" value="cn.com.common.*.mapper" />
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
     </bean>
@@ -128,7 +128,7 @@ Spring的工作方式都知道，通过配置各种xml文件，然后在web.xml�
     <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">
         <property name="patterns">
             <list>
-                <value>cn.com.bluemoon.service.*</value>
+                <value>cn.com.service.*</value>
             </list>
         </property>
     </bean>
