@@ -62,25 +62,25 @@ Spring的工作方式都知道，通过配置各种xml文件，然后在web.xml�
 	<!-- 针对myBatis的配置项============================= -->
     <!-- 配置sqlSessionFactory 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
-    <bean id="sqlSessionFactory" class="cn.com.bluemoon.timer.util.SqlSessionFactoryBeanUtil">
+    <bean id="sqlSessionFactory" class="cn.com.timer.util.SqlSessionFactoryBeanUtil">
         <!-- 实例化sqlSessionFactory时需要使用上述配置好的数据源以及SQL映射文件 -->
         <property name="dataSource" ref="dataSource" />
         <!-- 自动扫描 目录下的所有SQL映射的xml文件, 省掉Configuration.xml里的手工配置
   <property name="configLocation" value="classpath:/mybatis-config.xml"></property>
         <property name="mapperLocations" value="classpath:/mappings/**/*.xml"/>
-  <property name="mapperLocations" value="classpath:cn/com/bluemoon/common/dispatch/**/*Mapper.xml"/>
+  <property name="mapperLocations" value="classpath:cn/com/common/dispatch/**/*Mapper.xml"/>
          -->
 
         <property name="mapperLocations">
             <list>
-                <value>classpath:cn/com/bluemoon/common/**/**/*Mapper.xml</value>
+                <value>classpath:cn/com/common/**/**/*Mapper.xml</value>
             </list>
         </property>
     </bean>
     <!-- 配置扫描器 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <!-- 扫描cn.com.bluemoon.common.*.mapper以及它的子包下的所有映射接口类 -->
-        <property name="basePackage" value="cn.com.bluemoon.common.*.mapper" />
+        <property name="basePackage" value="cn.com.common.*.mapper" />
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
     </bean>
 
@@ -118,7 +118,7 @@ Spring的工作方式都知道，通过配置各种xml文件，然后在web.xml�
         </tx:attributes>
     </tx:advice>
     <aop:config>
-        <aop:pointcut id="transactionPointcut" expression="execution(* cn.com.bluemoon.service..*Impl.*(..))" />
+        <aop:pointcut id="transactionPointcut" expression="execution(* cn.com.service..*Impl.*(..))" />
         <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice" />
     </aop:config>
 
