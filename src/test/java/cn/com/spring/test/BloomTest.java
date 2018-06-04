@@ -41,6 +41,7 @@ public class BloomTest {
 		boBloomFilter.put("2a");
 		boBloomFilter.put("a2");
 		boBloomFilter.put("a4");
+		boBloomFilter.put("a");
 //		System.out.println(boBloomFilter.mightContain(""));
 //		annotationContext = new AnnotationConfigApplicationContext(RedisConfig.class);
 //		RedisPropertiesBean bean = annotationContext.getBean(RedisPropertiesBean.class);
